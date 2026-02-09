@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introduce me</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    font-family:Arial,Helvetica,sans-serif;
+    background:linear-gradient(135deg,#1e3c72,#2a5298);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:rgb(255, 255, 255);
+}
+.box{
+    background:rgba(0,0,0,.35);
+    padding:40px;
+    border-radius:15px;
+    text-align:center;
+    width:320px;
+    box-shadow:0 0 25px rgba(0,0,0,.5);
+}
+a{color:#00ffcc;word-break:break-all}
+input[type=password]{
+    margin-top:20px;
+    padding:12px;
+    width:100%;
+    border-radius:8px;
+    border:none;
+    font-size:16px;
+}
+footer{
+    margin-top:20px;
+    font-size:12px;
+    opacity:.7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h1>Contact with us:</h1>
+    <a href="#" onclick="alert('Vui lòng đăng nhập trước!')">
+        https://thkhoa109-droid.github.io/MRprogamSKSDownloads/
+    </a>
+
+    <input type="password" id="pass" placeholder="Nhập mật khẩu rồi bấm Enter">
+    <footer>© 2024 by THKhoa109-Droid / SKSDOWNLOADS.</footer>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+
+/* ===== LOGIN ===== */
+const PASS="kh248";
+const PASS1="kh666";
+const PASS2="th248";
+const NEXT="https://thkhoa109-droid.github.io/MRprogamSKSDownloads/";
+const KEY="ok";
+const input=document.getElementById("pass");
+
+input.focus();
+
+input.addEventListener("keydown",e=>{
+    if(e.key==="Enter"){
+       if (
+    input.value.trim() === PASS ||
+    input.value.trim() === PASS1 ||
+    input.value.trim() === PASS2
+) {
+    localStorage.setItem(KEY,"1");
+    location.href = NEXT;
+} else {
+    alert("Sai mật khẩu!");
+    input.value = "";
+}
+
+    }
+});
+
+/* ===== BLOCK DEVTOOLS PC ===== */
+document.addEventListener("contextmenu",e=>e.preventDefault());
+document.addEventListener("keydown",e=>{
+    if(
+        e.key==="F12" ||
+        (e.ctrlKey && e.shiftKey) ||
+        (e.ctrlKey && e.key==="U")
+    ){
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    }
+});
+
+/* ===== BLOCK DEVTOOLS MOBILE ===== */
+document.addEventListener("touchstart",e=>{
+    if(e.touches.length>1) e.preventDefault();
+},{passive:false});
+
+document.addEventListener("gesturestart",e=>e.preventDefault());
+
+/* ===== DETECT DEVTOOLS ===== */
+setInterval(()=>{
+    if(
+        window.outerWidth-window.innerWidth>160 ||
+        window.outerHeight-window.innerHeight>160
+    ){
+        document.body.innerHTML=
+        "<h1 style='text-align:center;margin-top:40vh'>⚠️ DevTools bị phát hiện</h1>";
+    }
+},700);
+
+});
+</script>
+
+</body>
+</html>
