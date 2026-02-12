@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Introduce me</title>
+<title>Login OTP</title>
 
 <style>
 body{
@@ -14,7 +14,7 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    color:rgb(255, 255, 255);
+    color:white;
 }
 .box{
     background:rgba(0,0,0,.35);
@@ -24,8 +24,7 @@ body{
     width:320px;
     box-shadow:0 0 25px rgba(0,0,0,.5);
 }
-a{color:#00ffcc;word-break:break-all}
-input[type=password]{
+input{
     margin-top:20px;
     padding:12px;
     width:100%;
@@ -44,77 +43,91 @@ footer{
 <body>
 
 <div class="box">
-    <h1>Contact with us:</h1>
-    <a href="#" onclick="alert('Vui lòng đăng nhập trước!')">
-        https://thkhoa109-droid.github.io/MRprogamSKSDownloads/
-    </a>
+    <h1>Login bằng OTP</h1>
+    <p>Nhập email để nhận mã xác minh</p>
 
-    <input type="password" id="pass" placeholder="Nhập mật khẩu rồi bấm Enter">
-    <footer>© 2024 by THKhoa109-Droid / SKSDOWNLOADS.</footer>
+    <input type="email" id="email" placeholder="Nhập email rồi bấm Enter">
+    <div id="otpArea"></div>
+
+    <footer>© 2026 THKhoa109-Droid</footer>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
 <script>
-document.addEventListener("DOMContentLoaded",function(){
+document.addEventListener("DOMContentLoaded", function(){
 
-/* ===== LOGIN ===== */
-const PASS="kh248";
-const PASS1="kh666";
-const PASS2="th248";
-const NEXT="https://thkhoa109-droid.github.io/MRprogamSKSDownloads/";
-const KEY="ok";
-const input=document.getElementById("pass");
+emailjs.init("jZNFpiP6_5wtr0yql");
 
-input.focus();
+const SERVICE_ID = "service_qqug51j";
+const TEMPLATE_ID = "template_skla7hm";
+const NEXT_PAGE = "https://thkhoa109-droid.github.io/MRprogamSKSDownloads/";
 
-input.addEventListener("keydown",e=>{
-    if(e.key==="Enter"){
-       if (
-    input.value.trim() === PASS ||
-    input.value.trim() === PASS1 ||
-    input.value.trim() === PASS2
-) {
-    localStorage.setItem(KEY,"1");
-    location.href = NEXT;
-} else {
-    alert("Sai mật khẩu!");
-    input.value = "";
+let generatedOTP = "";
+let otpSent = false;
+
+function generateOTP(){
+    return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
+const emailInput = document.getElementById("email");
+const otpArea = document.getElementById("otpArea");
+
+/* ===== GỬI OTP ===== */
+emailInput.addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+
+        if(otpSent) return;
+
+        if(emailInput.value.trim() === ""){
+            alert("Vui lòng nhập email!");
+            return;
+        }
+
+        generatedOTP = generateOTP();
+        otpSent = true;
+
+        emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+            to_email: emailInput.value,
+            otp_code: generatedOTP
+        }).then(function(){
+
+            alert("Đã gửi OTP về email!");
+            showOTPInput();
+
+        }).catch(function(error){
+            alert("Gửi email thất bại!");
+            otpSent = false;
+            console.log(error);
+        });
     }
 });
 
-/* ===== BLOCK DEVTOOLS PC ===== */
-document.addEventListener("contextmenu",e=>e.preventDefault());
-document.addEventListener("keydown",e=>{
-    if(
-        e.key==="F12" ||
-        (e.ctrlKey && e.shiftKey) ||
-        (e.ctrlKey && e.key==="U")
-    ){
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-    }
-});
+/* ===== NHẬP OTP ===== */
+function showOTPInput(){
 
-/* ===== BLOCK DEVTOOLS MOBILE ===== */
-document.addEventListener("touchstart",e=>{
-    if(e.touches.length>1) e.preventDefault();
-},{passive:false});
+    emailInput.disabled = true;
 
-document.addEventListener("gesturestart",e=>e.preventDefault());
+    const otpInput = document.createElement("input");
+    otpInput.type = "text";
+    otpInput.placeholder = "Nhập mã OTP rồi bấm Enter";
+    otpArea.appendChild(otpInput);
 
-/* ===== DETECT DEVTOOLS ===== */
-setInterval(()=>{
-    if(
-        window.outerWidth-window.innerWidth>160 ||
-        window.outerHeight-window.innerHeight>160
-    ){
-        document.body.innerHTML=
-        "<h1 style='text-align:center;margin-top:40vh'>⚠️ DevTools bị phát hiện</h1>";
-    }
-},700);
+    otpInput.focus();
 
+    otpInput.addEventListener("keydown", function(e){
+        if(e.key === "Enter"){
+
+            if(otpInput.value === generatedOTP){
+                alert("Xác minh thành công!");
+                window.location.href = NEXT_PAGE;
+            } else {
+                alert("Sai mã OTP!");
+            }
+        }
+    });
+}
+/* ===== BLOCK DEVTOOLS PC ===== */ document.addEventListener("contextmenu",e=>e.preventDefault()); document.addEventListener("keydown",e=>{ if( e.key==="F12" || (e.ctrlKey && e.shiftKey) || (e.ctrlKey && e.key==="U") ){ e.preventDefault(); e.stopPropagation(); return false; } }); /* ===== BLOCK DEVTOOLS MOBILE ===== */ document.addEventListener("touchstart",e=>{ if(e.touches.length>1) e.preventDefault(); },{passive:false}); document.addEventListener("gesturestart",e=>e.preventDefault()); setInterval(()=>{ if( window.outerWidth-window.innerWidth>160 || window.outerHeight-window.innerHeight>160 ){ document.body.innerHTML = "<h1 style='text-align:center;margin-top:40vh'>⚠️ DevTools bị phát hiện</h1>"; } },700);
 });
 </script>
 
